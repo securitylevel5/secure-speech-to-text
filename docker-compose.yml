@@ -1,0 +1,43 @@
+services:
+  gpu:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./input:/app/input
+      - ./output:/app/output
+      - ./.env:/app/.env:ro
+      - model-cache:/root/.cache  # Cache model weights between runs
+    environment:
+      - HUGGINGFACE_HUB_TOKEN=${HUGGINGFACE_HUB_TOKEN}
+      - HF_TOKEN=${HUGGINGFACE_HUB_TOKEN}
+      - HUGGINGFACE_TOKEN=${HUGGINGFACE_HUB_TOKEN}
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    # Usage: docker compose run --rm gpu input/meeting.m4a -y
+
+  cpu:
+    build:
+      context: .
+      dockerfile: Dockerfile.cpu
+    volumes:
+      - ./input:/app/input
+      - ./output:/app/output
+      - ./.env:/app/.env:ro
+      - model-cache:/root/.cache  # Cache model weights between runs
+    environment:
+      - HUGGINGFACE_HUB_TOKEN=${HUGGINGFACE_HUB_TOKEN}
+      - HF_TOKEN=${HUGGINGFACE_HUB_TOKEN}
+      - HUGGINGFACE_TOKEN=${HUGGINGFACE_HUB_TOKEN}
+      - WHISPERX_DEVICE=cpu
+      - WHISPERX_COMPUTE_TYPE=int8
+    # Usage: docker compose run --rm cpu input/meeting.m4a -y
+
+volumes:
+  model-cache:  # Persistent volume for HuggingFace/torch model weights
+

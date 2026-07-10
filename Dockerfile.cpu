@@ -1,0 +1,38 @@
+# Secure Speech-to-Text - CPU Dockerfile
+FROM python:3.13-slim
+
+# Prevent interactive prompts during package installation
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Fix PyTorch 2.6+ weights_only default change (pyannote models need this)
+ENV TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD=1
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y \
+    ffmpeg \
+    git \
+    && rm -rf /var/lib/apt/lists/*
+
+# Bootstrap pip (ensurepip needed for 3.13) and install uv (fast parallel installer)
+RUN python -m ensurepip --upgrade \
+    && python -m pip install --upgrade pip \
+    && python -m pip install uv
+
+# Set working directory
+WORKDIR /app
+
+# Copy requirements and install dependencies using uv (fast, parallel downloads)
+COPY requirements.txt .
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv pip install --system --no-cache -r requirements.txt
+
+# Copy application code
+COPY . .
+
+# Create input/output directories
+RUN mkdir -p input output
+
+# Set default command
+ENTRYPOINT ["python", "secure_speech_to_text.py"]
+CMD ["--help"]
+

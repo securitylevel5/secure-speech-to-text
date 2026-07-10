@@ -1,0 +1,5 @@
+whisperx==3.7.4
+tiktoken
+python-dotenv
+openai
+transformers  # Optional: for --method transformers in utils/token_counter.py

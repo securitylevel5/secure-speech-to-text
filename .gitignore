@@ -1,0 +1,22 @@
+*.json
+*.tsv
+recording.txt
+*.vtt
+*.pdf
+executive_summary.md
+*.srt
+*.wav
+*.zip
+*.txt
+!requirements.txt
+*.m4a
+
+# Input/Output folders (keep folders, ignore contents)
+input/*
+!input/.gitkeep
+output/*
+!output/.gitkeep
+
+# Environment configuration
+.env
+.venv
