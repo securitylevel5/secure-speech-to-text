@@ -1,0 +1,42 @@
+# Docker does not read .gitignore, so this file has to repeat it.
+# Both Dockerfiles do `COPY . .`, so anything not excluded here is baked
+# into an image layer permanently -- a later `rm` does NOT remove it.
+
+# Secrets. docker-compose.yml bind-mounts ./.env:/app/.env:ro at runtime,
+# so the build never needs it. .env.example is kept (pattern is exact).
+.env
+
+# Local virtualenv. ~1 GB once torch/whisperx are installed, and it would
+# shadow the container's own site-packages.
+.venv
+
+# VCS
+.git
+.gitignore
+.dockerignore
+
+# Python build artifacts
+__pycache__/
+*.py[cod]
+
+# Input/output working dirs. Both Dockerfiles `RUN mkdir -p input output`,
+# so excluding the contents here is safe.
+input/*
+output/*
+
+# Generated transcript/summary artifacts (mirrors .gitignore)
+*.json
+*.tsv
+*.vtt
+*.srt
+*.pdf
+*.zip
+*.wav
+*.m4a
+recording.txt
+executive_summary.md
+
+# *.txt is excluded for transcripts, but requirements.txt must stay copyable:
+# both Dockerfiles do `COPY requirements.txt .` before the main COPY.
+*.txt
+!requirements.txt
