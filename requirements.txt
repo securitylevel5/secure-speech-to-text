@@ -1,4 +1,4 @@
-whisperx==3.7.4
+whisperx==3.8.6
 tiktoken
 python-dotenv
 openai
