@@ -1,4 +1,12 @@
 # Secure Speech-to-Text - GPU Dockerfile (CUDA 12.8 + cuDNN)
+#
+# Python target: 3.13 (matches .python-version and Dockerfile.cpu).
+#
+# This base is ubuntu22.04, whose *system* Python is 3.10. We do not use it --
+# 3.13 comes from the deadsnakes PPA below and is made the default via
+# update-alternatives. Don't "simplify" this by switching to the ubuntu24.04
+# base: it ships Python 3.12, which is further from the 3.13 standard, not
+# closer. WhisperX requires >=3.10,<3.14, so 3.13 is the newest usable minor.
 FROM nvidia/cuda:12.8.0-cudnn-runtime-ubuntu22.04
 
 # Prevent interactive prompts during package installation

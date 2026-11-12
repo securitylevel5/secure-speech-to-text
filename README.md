@@ -112,7 +112,7 @@ python secure_speech_to_text.py meeting.m4a --output-dir ./my-transcripts
 
 ### Prerequisites
 
-- **Python 3.9 to 3.13** (3.14+ not supported by WhisperX)
+- **Python 3.13** (see `.python-version`). WhisperX requires `>=3.10,<3.14`, so 3.13 is the newest usable minor.
 - FFmpeg installed and on PATH
 - A local LLM server for executive summaries (optional)
 
